@@ -1,4 +1,4 @@
-import {StopRTPIBusData, StopRTPIResponseData, TFIApiResponse} from '../models/stopRTPIData';
+import {StopRTPIBusData, StopRTPIResponseData, TFIApiResponse} from '../models/stop-rtpi-data';
 import { Request } from 'express';
 import axios from 'axios';
 import * as https from 'https';
