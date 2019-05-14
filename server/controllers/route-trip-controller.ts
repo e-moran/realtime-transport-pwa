@@ -1,8 +1,10 @@
-import {RouteStop, RouteStopDBRow, RouteTripDataResponse} from '../models/route-trip-data';
+import {RouteStop, RouteTripDataResponse} from '../models/route-trip-data';
 import * as mysql from 'mysql';
 import { ServerSettingsController } from './server-settings-controller';
 
 export class RouteTripController {
+  static dateMapping= ['sunday', 'monday', 'tuesday', 'wednesday', 'thursday', 'friday'];
+
   constructor() { }
 
   public async getRouteTripData(routeid: string, direction: string, stopid: string, departuretime: string): Promise<RouteTripDataResponse> {
@@ -12,7 +14,8 @@ export class RouteTripController {
       host: 'localhost',
       user: settings.mysqlUsername,
       password: settings.mysqlPassword,
-      database: settings.mysqlDatabase
+      database: settings.mysqlDatabase,
+      multipleStatements: true
     });
 
     con.connect(err => {
@@ -22,18 +25,20 @@ export class RouteTripController {
     });
 
     let result: RouteTripDataResponse = null;
+    const day = RouteTripController.dateMapping[new Date().getDay()];
 
     const query = new Promise((resolve, reject) => {
       con.query(
-        "SELECT * FROM Stop_Times WHERE day_id=? AND route_num=? AND direction=? AND " +
-        "trip_id=(SELECT trip_id FROM Stop_Times WHERE day_id=? AND route_num=? AND direction=? " +
+        "SELECT @day_id := days_id FROM Days WHERE " + day + "=1 LIMIT 1; SELECT * FROM Stop_Times WHERE day_id=@day_id AND route_num=? AND direction=? AND " +
+        "trip_id=(SELECT trip_id FROM Stop_Times WHERE day_id=@day_id AND route_num=? AND direction=? " +
         "AND stop_num=? AND departure_time=?);",
-        ['y103p', routeid, direction, 'y103p', routeid, direction, stopid, departuretime],
-        (err, rows: RouteStopDBRow[]) => {
+        [routeid, direction, routeid, direction, stopid, departuretime],
+        (err, rows) => {
+          console.log(rows);
           if (err) reject();
           let stops: RouteStop[] = [];
 
-          if(rows.length == 0) {
+          if(rows[1].length == 0) {
             result = {
               status: 1,
               timestamp: '',
@@ -46,7 +51,7 @@ export class RouteTripController {
             return;
           }
 
-          rows.forEach(row => {
+          rows[1].forEach(row => {
             stops.push({
               id: row.stop_id,
               num: row.stop_num,
