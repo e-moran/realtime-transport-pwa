@@ -1,4 +1,4 @@
-import {RouteStop, RouteTripDataResponse} from '../models/route-trip-data';
+import { RouteStop, RouteTripDataResponse } from '../models/route-trip-data';
 import * as mysql from 'mysql';
 import { ServerSettingsController } from './server-settings-controller';
 
@@ -9,6 +9,7 @@ export class RouteTripController {
 
   public async getRouteTripData(routeid: string, direction: string, stopid: string, departuretime: string): Promise<RouteTripDataResponse> {
     const settings = ServerSettingsController.getServerConfig();
+    console.log(routeid + ' ' + direction + ' ' + stopid + ' ' + departuretime);
 
     const con = mysql.createConnection({
       host: 'localhost',
@@ -31,10 +32,10 @@ export class RouteTripController {
       con.query(
         "SELECT @day_id := days_id FROM Days WHERE " + day + "=1 LIMIT 1; SELECT * FROM Stop_Times WHERE day_id=@day_id AND route_num=? AND direction=? AND " +
         "trip_id=(SELECT trip_id FROM Stop_Times WHERE day_id=@day_id AND route_num=? AND direction=? " +
-        "AND stop_num=? AND departure_time=?);",
+        "AND stop_num=? ORDER BY abs(TIMESTAMPDIFF(SECOND, departure_time, STR_TO_DATE(?, '%H:%i:%s')))\n" +
+        "LIMIT 1);",
         [routeid, direction, routeid, direction, stopid, departuretime],
         (err, rows) => {
-          console.log(rows);
           if (err) reject();
           let stops: RouteStop[] = [];
 

@@ -1,6 +1,7 @@
 import { Request, Response } from 'express';
 import { StopRTPIController } from '../controllers/stop-rtpi-controller';
 import {RouteTripController} from "../controllers/route-trip-controller";
+import {RTPITripCombiController} from '../controllers/rtpi-trip-combi-controller';
 
 export class Routes {
   public routes(app): void {
@@ -25,6 +26,11 @@ export class Routes {
         });
       });
     // Returns the RTPI information for a stop and all associated data
-    app.route('/api/stoprtpianddata')
+    app.route('/api/rtpitripcombi/:stopid')
+      .get((req: Request, res: Response) => {
+        new RTPITripCombiController().getCombiData(req.params.stopid).then(data => {
+          res.json(data);
+        })
+      })
   }
 }
