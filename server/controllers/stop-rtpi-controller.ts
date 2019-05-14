@@ -1,12 +1,11 @@
 import {StopRTPIBusData, StopRTPIResponseData, TFIApiResponse} from '../models/stop-rtpi-data';
-import { Request } from 'express';
 import axios from 'axios';
 import * as https from 'https';
 
 export class StopRTPIController {
   constructor() {}
 
-  public getStopRTPIData(req: Request): Promise<StopRTPIResponseData> {
+  public getStopRTPIData(stopid: string): Promise<StopRTPIResponseData> {
     let resp: StopRTPIResponseData;
 
     const instance = axios.create({
@@ -17,7 +16,7 @@ export class StopRTPIController {
 
     return instance.get<TFIApiResponse>('https://185.95.173.67/RTPIPublicService_V2/service.svc/realtimebusinformation', {
       params: {
-        stopid: req.params.stopid,
+        stopid: stopid,
         format: 'json'
       }
     }).then(res => {

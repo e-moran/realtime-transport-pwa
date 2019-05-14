@@ -1,12 +1,11 @@
 import {RouteStop, RouteStopDBRow, RouteTripDataResponse} from '../models/route-trip-data';
-import { Request } from 'express';
 import * as mysql from 'mysql';
 import { ServerSettingsController } from './server-settings-controller';
 
 export class RouteTripController {
   constructor() { }
 
-  public async getRouteTripData(req: Request): Promise<RouteTripDataResponse> {
+  public async getRouteTripData(routeid: string, direction: string, stopid: string, departuretime: string): Promise<RouteTripDataResponse> {
     const settings = ServerSettingsController.getServerConfig();
 
     const con = mysql.createConnection({
@@ -29,7 +28,7 @@ export class RouteTripController {
         "SELECT * FROM Stop_Times WHERE day_id=? AND route_num=? AND direction=? AND " +
         "trip_id=(SELECT trip_id FROM Stop_Times WHERE day_id=? AND route_num=? AND direction=? " +
         "AND stop_num=? AND departure_time=?);",
-        ['y103p', req.params.routeid, req.params.direction, 'y103p', req.params.routeid, req.params.direction, req.params.stopid, req.params.departuretime],
+        ['y103p', routeid, direction, 'y103p', routeid, direction, stopid, departuretime],
         (err, rows: RouteStopDBRow[]) => {
           if (err) reject();
           let stops: RouteStop[] = [];
