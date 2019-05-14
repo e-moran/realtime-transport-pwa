@@ -1,5 +1,6 @@
 import { Request, Response } from 'express';
 import { StopRTPIController } from '../controllers/stop-rtpi-controller';
+import {RouteTripController} from "../controllers/route-trip-controller";
 
 export class Routes {
   public routes(app): void {
@@ -13,6 +14,12 @@ export class Routes {
         stopRTPIController.getStopRTPIData(req).then(data => {
           res.json(data);
         })
+      });
+    app.route('/api/routestops/:stopid/:routeid/:direction/:departuretime')
+      .get((req: Request, res: Response) => {
+        new RouteTripController().getRouteTripData(req).then(data => {
+          res.json(data);
+        });
       });
   }
 }
