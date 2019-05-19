@@ -1,0 +1,18 @@
+@import "../../_variables.scss";
+
+mat-list {
+  background-color: $primary;
+}
+
+mat-spinner {
+  margin-top: 2rem;
+  float: left;
+}
+
+.spinner {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  text-align: center;
+}

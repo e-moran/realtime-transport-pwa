@@ -1,3 +1,12 @@
-<p>
-  stop-rtpi works!
-</p>
+<mat-list *ngIf="rtpiInfo; else waiting">
+  <mat-list-item *ngFor="let bus of rtpiInfo">
+    <mat-icon mat-list-icon>directions_bus</mat-icon>
+    <h4 mat-line><strong>{{ bus.route }}</strong>&nbsp;-&nbsp;{{ bus.destination }}</h4>
+    <p mat-line>{{ bus.dueTime | dueTime }}</p>
+    <mat-divider></mat-divider>
+  </mat-list-item>
+</mat-list>
+
+<ng-template #waiting>
+  <div class="spinner"><mat-spinner></mat-spinner></div>
+</ng-template>
