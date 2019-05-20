@@ -1,10 +1,13 @@
 <mat-list *ngIf="rtpiInfo; else waiting">
-  <mat-list-item *ngFor="let bus of rtpiInfo">
-    <mat-icon mat-list-icon>directions_bus</mat-icon>
-    <h4 mat-line><strong>{{ bus.route }}</strong>&nbsp;-&nbsp;{{ bus.destination }}</h4>
-    <p mat-line>{{ bus.dueTime | dueTime }}</p>
-    <mat-divider></mat-divider>
-  </mat-list-item>
+  <mat-expansion-panel *ngFor="let bus of rtpiInfo">
+    <mat-expansion-panel-header>
+      <mat-list-item>
+        <mat-icon mat-list-icon>directions_bus</mat-icon>
+        <h4 mat-line><strong>{{ bus.route }}</strong>&nbsp;-&nbsp;{{ bus.destination }}</h4>
+        <p mat-line>{{ bus.dueTime | dueTime }}</p>
+      </mat-list-item>
+    </mat-expansion-panel-header>
+  </mat-expansion-panel>
 </mat-list>
 
 <ng-template #waiting>

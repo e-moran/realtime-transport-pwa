@@ -13,7 +13,8 @@ import {
   MatToolbarModule,
   MatButtonModule,
   MatSidenavModule,
-  MatProgressSpinnerModule
+  MatProgressSpinnerModule,
+  MatExpansionModule
 } from '@angular/material';
 import { NavComponent } from './nav/nav.component';
 import { LayoutModule } from '@angular/cdk/layout';
@@ -38,7 +39,8 @@ import { DueTimePipe } from './due-time.pipe';
     MatToolbarModule,
     MatButtonModule,
     MatSidenavModule,
-    MatProgressSpinnerModule
+    MatProgressSpinnerModule,
+    MatExpansionModule
   ],
   providers: [],
   bootstrap: [AppComponent]
