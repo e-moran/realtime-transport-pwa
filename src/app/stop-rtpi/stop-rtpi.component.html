@@ -1,4 +1,9 @@
-<mat-list *ngIf="rtpiInfo; else waiting">
+<mat-list *ngIf="rtpiInfo && stopInfo; else waiting">
+  <mat-list-item>
+    <mat-icon matListIcon>location_on</mat-icon>
+    <h4 matLine>{{ stopInfo.stop_name }}</h4>
+    <p matLine>{{ stopInfo.stop_num }}</p>
+  </mat-list-item>
   <app-dropdown-route-info *ngFor="let bus of rtpiInfo" [rtpiData]="bus" [stopNum]="stopNum"></app-dropdown-route-info>
 </mat-list>
 

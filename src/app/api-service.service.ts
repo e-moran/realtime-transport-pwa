@@ -4,6 +4,7 @@ import { StopRTPIBusData, StopRTPIResponseData } from './models/stop-rtpi-model'
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { RouteInfo, RouteTripDataResponse } from './models/route-info-model';
+import { StopInfoResponse } from './models/stop-info-data';
 
 @Injectable({
   providedIn: 'root'
@@ -29,6 +30,14 @@ export class ApiService {
         map((resp: RouteTripDataResponse) => {
           return resp.result;
         })
+    )
+  }
+
+  public getStopInfo(stopnum: number) {
+    return this.http.get<StopInfoResponse>(this.apiURL + 'stopinfo/' + stopnum).pipe(
+      map((resp: StopInfoResponse) => {
+        return resp.result;
+      })
     )
   }
 }
