@@ -5,3 +5,11 @@ agm-map {
 .marker-info {
   color: black;
 }
+
+.spinner {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  text-align: center;
+}

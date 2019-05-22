@@ -7,7 +7,7 @@
     </mat-list-item>
   </mat-expansion-panel-header>
 
-  <div *ngIf="thisStop && routeInfo">
+  <div *ngIf="thisStop && routeInfo; else waiting">
     <agm-map [latitude]="thisStop.stop_lat" [longitude]="thisStop.stop_lon" [zoom]="15">
       <agm-marker *ngFor="let stop of routeInfo.stops" [latitude]="stop.stop_lat" [longitude]="stop.stop_lon">
         <agm-info-window>
@@ -23,4 +23,8 @@
       </agm-polyline>
     </agm-map>
   </div>
+
+  <ng-template #waiting>
+    <div class="spinner"><mat-spinner></mat-spinner></div>
+  </ng-template>
 </mat-expansion-panel>
