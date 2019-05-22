@@ -96,7 +96,7 @@ export class RouteTripController {
 
     await query;
 
-    con.end(() => { });
+    con.end();
 
     return result;
   }

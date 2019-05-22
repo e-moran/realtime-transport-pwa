@@ -16,7 +16,7 @@ export class RTPITripCombiController {
         let tripPromises: Promise<void>[] = [];
 
         res.results.forEach(rtpiBus => {
-          tripPromises.push(routeTripController.getRouteTripData(rtpiBus.route, rtpiBus.direction, stopid, rtpiBus.scheduledDepartureDateTime.split(' ')[1]).then(data => {
+          tripPromises.push(routeTripController.getRouteTripData(rtpiBus.route, rtpiBus.direction, stopid, rtpiBus.scheduledDepartureDateTime.split(' ')[1], rtpiBus.operator).then(data => {
             result.push({
               rtpiinfo: rtpiBus,
               tripdata: data.result
