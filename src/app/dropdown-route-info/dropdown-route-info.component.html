@@ -1,3 +1,26 @@
-<div *ngIf="thisStop && routeInfo">
-  <p>Scheduled Arrival Time: {{ thisStop.time }}</p>
-</div>
+<mat-expansion-panel (opened)="fetchRouteInfo()">
+  <mat-expansion-panel-header>
+    <mat-list-item>
+      <mat-icon mat-list-icon>directions_bus</mat-icon>
+      <h4 mat-line><strong>{{ rtpiData.route }}</strong>&nbsp;-&nbsp;{{ rtpiData.destination }}</h4>
+      <p mat-line>{{ rtpiData.dueTime | dueTime }}</p>
+    </mat-list-item>
+  </mat-expansion-panel-header>
+
+  <div *ngIf="thisStop && routeInfo">
+    <agm-map [latitude]="thisStop.stop_lat" [longitude]="thisStop.stop_lon" [zoom]="15">
+      <agm-marker *ngFor="let stop of routeInfo.stops" [latitude]="stop.stop_lat" [longitude]="stop.stop_lon">
+        <agm-info-window>
+          <div class="marker-info">
+            {{ stop.name }}
+            <br />
+            Scheduled Arrival: {{ stop.time }}
+          </div>
+        </agm-info-window>
+      </agm-marker>
+      <agm-polyline>
+        <agm-polyline-point *ngFor="let stop of routeInfo.stops" [longitude]="stop.stop_lon" [latitude]="stop.stop_lat"></agm-polyline-point>
+      </agm-polyline>
+    </agm-map>
+  </div>
+</mat-expansion-panel>

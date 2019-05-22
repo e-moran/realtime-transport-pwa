@@ -20,6 +20,8 @@ import { NavComponent } from './nav/nav.component';
 import { LayoutModule } from '@angular/cdk/layout';
 import { DueTimePipe } from './due-time.pipe';
 import { DropdownRouteInfoComponent } from './dropdown-route-info/dropdown-route-info.component';
+import { AgmCoreModule } from '@agm/core';
+import { GMAPS_KEY } from './keys';
 
 @NgModule({
   declarations: [
@@ -42,7 +44,10 @@ import { DropdownRouteInfoComponent } from './dropdown-route-info/dropdown-route
     MatButtonModule,
     MatSidenavModule,
     MatProgressSpinnerModule,
-    MatExpansionModule
+    MatExpansionModule,
+    AgmCoreModule.forRoot({
+      apiKey: GMAPS_KEY
+    })
   ],
   providers: [],
   bootstrap: [AppComponent]

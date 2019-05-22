@@ -22,15 +22,20 @@ export class DropdownRouteInfoComponent implements OnInit {
   constructor(private apiService: ApiService) { }
 
   ngOnInit() {
-    this.apiService.getRouteInfo(this.stopNum, this.rtpiData).subscribe(data => {
-      this.routeInfo = data;
-      this.routeInfo.stops.forEach(stop => {
-        if (stop.num == this.stopNum) {
-          this.thisStop = stop;
-          console.log(this.thisStop);
-        }
+  }
+
+  public fetchRouteInfo(): void {
+    if(!this.routeInfo) { // If the user opens and closes the drop down we don't want to reload the data
+      this.apiService.getRouteInfo(this.stopNum, this.rtpiData).subscribe(data => {
+        this.routeInfo = data;
+        this.routeInfo.stops.forEach(stop => {
+          if (stop.num == this.stopNum) {
+            this.thisStop = stop;
+            console.log(this.thisStop);
+          }
+        });
       });
-    });
+    }
   }
 
 }
