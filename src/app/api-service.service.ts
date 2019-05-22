@@ -24,7 +24,7 @@ export class ApiService {
 
   public getRouteInfo(stopnum: number, rtpiData: StopRTPIBusData): Observable<RouteInfo> {
     return this.http.get<RouteTripDataResponse>(this.apiURL + 'routestops/' + stopnum + '/'
-      + rtpiData.route + '/' + rtpiData.direction + '/' + encodeURIComponent(rtpiData.scheduledDepartureDateTime) +
+      + rtpiData.route + '/' + rtpiData.direction + '/' + encodeURIComponent(rtpiData.scheduledDepartureDateTime.split(' ')[1]) +
       '/' + rtpiData.operator).pipe(
         map((resp: RouteTripDataResponse) => {
           return resp.result;
