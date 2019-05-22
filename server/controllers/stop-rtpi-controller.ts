@@ -28,7 +28,8 @@ export class StopRTPIController {
           dueTime: +result.duetime,
           destination: result.destination,
           direction: result.direction.charAt(0),
-          route: result.route
+          route: result.route,
+          operator: result.operator
         });
       });
       resp = {

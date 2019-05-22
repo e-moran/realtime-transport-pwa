@@ -11,6 +11,7 @@ export interface StopRTPIBusData {
   destination: string;
   direction: string;
   route: string;
+  operator: string;
 }
 
 export interface TFIApiResult {
