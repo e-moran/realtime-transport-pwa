@@ -108,8 +108,8 @@ export class RouteTripController {
     let agencyMap = new Map();
     agencyMap.set('bac', '978');
     agencyMap.set('nightlink', 'NTLK');
-    agencyMap.set('be', '01');
-    agencyMap.set('gai', '03');
+    agencyMap.set('BE', '01');
+    agencyMap.set('GAD', '03');
 
     return agencyMap.get(agencyName);
   }
