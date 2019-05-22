@@ -10,6 +10,10 @@ export interface RouteTripData {
 
 export interface RouteStop {
   id: string;
+  name: string;
   num: number;
   time: string;
+  sequence: number;
+  stop_lat: number;
+  stop_lon: number;
 }

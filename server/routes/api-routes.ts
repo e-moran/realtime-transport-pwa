@@ -19,9 +19,9 @@ export class Routes {
         })
       });
     // Returns all the stops along a certain Dublin Bus route along with some basic information
-    app.route('/api/routestops/:stopid/:routeid/:direction/:departuretime')
+    app.route('/api/routestops/:stopid/:routeid/:direction/:departuretime/:agencyname')
       .get((req: Request, res: Response) => {
-        new RouteTripController().getRouteTripData(req.params.routeid, req.params.direction, req.params.stopid, req.params.departuretime).then(data => {
+        new RouteTripController().getRouteTripData(req.params.routeid, req.params.direction, req.params.stopid, req.params.departuretime, req.params.agencyname).then(data => {
           res.json(data);
         });
       });
