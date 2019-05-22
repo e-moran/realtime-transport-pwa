@@ -19,13 +19,15 @@ import {
 import { NavComponent } from './nav/nav.component';
 import { LayoutModule } from '@angular/cdk/layout';
 import { DueTimePipe } from './due-time.pipe';
+import { DropdownRouteInfoComponent } from './dropdown-route-info/dropdown-route-info.component';
 
 @NgModule({
   declarations: [
     AppComponent,
     StopRtpiComponent,
     NavComponent,
-    DueTimePipe
+    DueTimePipe,
+    DropdownRouteInfoComponent
   ],
   imports: [
     BrowserModule,

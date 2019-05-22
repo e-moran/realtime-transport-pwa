@@ -11,6 +11,7 @@ import { StopRTPIBusData } from '../models/stop-rtpi-model';
 export class StopRtpiComponent implements OnInit {
 
   public rtpiInfo: StopRTPIBusData[];
+  public stopNum: number;
 
   constructor(
     private route: ActivatedRoute,
@@ -18,12 +19,12 @@ export class StopRtpiComponent implements OnInit {
   ) { }
 
   ngOnInit() {
+    this.stopNum = +this.route.snapshot.paramMap.get('stop');
     this.getRTPIInfo();
   }
 
   getRTPIInfo(): void {
-    const id = +this.route.snapshot.paramMap.get('stop');
-    this.apiService.getStopRTPIInfo(id).subscribe(resp => {
+    this.apiService.getStopRTPIInfo(this.stopNum).subscribe(resp => {
       this.rtpiInfo = resp;
     });
   }

@@ -7,6 +7,8 @@
         <p mat-line>{{ bus.dueTime | dueTime }}</p>
       </mat-list-item>
     </mat-expansion-panel-header>
+
+    <app-dropdown-route-info [rtpiData]="bus" [stopNum]="stopNum"></app-dropdown-route-info>
   </mat-expansion-panel>
 </mat-list>
 

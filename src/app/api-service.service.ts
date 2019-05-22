@@ -3,6 +3,7 @@ import { HttpClient } from '@angular/common/http';
 import { StopRTPIBusData, StopRTPIResponseData } from './models/stop-rtpi-model';
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
+import { RouteInfo, RouteTripDataResponse } from './models/route-info-model';
 
 @Injectable({
   providedIn: 'root'
@@ -19,5 +20,15 @@ export class ApiService {
         return resp.results;
       })
     );
+  }
+
+  public getRouteInfo(stopnum: number, rtpiData: StopRTPIBusData): Observable<RouteInfo> {
+    return this.http.get<RouteTripDataResponse>(this.apiURL + 'routestops/' + stopnum + '/'
+      + rtpiData.route + '/' + rtpiData.direction + '/' + encodeURIComponent(rtpiData.scheduledDepartureDateTime) +
+      '/' + rtpiData.operator).pipe(
+        map((resp: RouteTripDataResponse) => {
+          return resp.result;
+        })
+    )
   }
 }
