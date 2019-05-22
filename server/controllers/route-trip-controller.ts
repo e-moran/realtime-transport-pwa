@@ -9,7 +9,6 @@ export class RouteTripController {
 
   public async getRouteTripData(routeid: string, direction: string, stopid: string, departuretime: string, agencyName: string): Promise<RouteTripDataResponse> {
     const settings = ServerSettingsController.getServerConfig();
-    console.log(routeid + ' ' + direction + ' ' + stopid + ' ' + departuretime);
 
     const con = mysql.createConnection({
       host: 'localhost',
@@ -54,8 +53,6 @@ export class RouteTripController {
         sql,
         [routeid, routeid, direction == 'O' ? 0 : 1, RouteTripController.getAgencyID(agencyName), stopid, departuretime],
         (err, rows) => {
-          console.log(err);
-          console.log(rows);
           if (err) reject();
           let stops: RouteStop[] = [];
 
