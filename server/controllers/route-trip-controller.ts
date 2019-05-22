@@ -59,7 +59,7 @@ export class RouteTripController {
           if(rows.length == 0) {
             result = {
               status: 1,
-              timestamp: '',
+              timestamp: new Date().toISOString(),
               result: {
                 stops: []
               }
@@ -83,7 +83,7 @@ export class RouteTripController {
 
           result =  {
             status: 0,
-            timestamp: '',
+            timestamp: new Date().toISOString(),
             result: {
               stops: stops
             }

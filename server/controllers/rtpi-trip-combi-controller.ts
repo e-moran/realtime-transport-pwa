@@ -34,7 +34,7 @@ export class RTPITripCombiController {
 
     return {
       status: 0,
-      timestamp: '',
+      timestamp: new Date().toISOString(),
       result: result
     };
   }

@@ -34,7 +34,7 @@ export class StopRTPIController {
       });
       resp = {
         errorCode: +res.data.errorcode,
-        timestamp: res.data.timestamp,
+        timestamp: new Date().toISOString(),
         results: results
       };
       return resp;
@@ -42,7 +42,7 @@ export class StopRTPIController {
       console.log(error);
       resp = {
         errorCode: error.response.status as number,
-        timestamp: '',
+        timestamp: new Date().toISOString(),
         results: [] as StopRTPIBusData[],
       };
       return resp;
