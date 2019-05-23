@@ -3,6 +3,7 @@ import { StopRTPIController } from '../controllers/stop-rtpi-controller';
 import {RouteTripController} from "../controllers/route-trip-controller";
 import {RTPITripCombiController} from '../controllers/rtpi-trip-combi-controller';
 import { StopInfoController } from '../controllers/stop-info-controller';
+import { StopSearchController } from '../controllers/stop-search-controller';
 
 export class Routes {
   public routes(app): void {
@@ -42,6 +43,13 @@ export class Routes {
         new StopInfoController().getStopInfo(req.params.stopnum).then( data => {
           res.json(data);
         })
+      });
+
+    app.route('/api/stopsearch/:term')
+      .get((req: Request, res: Response) => {
+        new StopSearchController().searchForStops(req.params.term).then(data => {
+          res.json(data);
+        });
       })
   }
 }

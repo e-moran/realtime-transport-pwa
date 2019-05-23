@@ -18,7 +18,7 @@ export class StopInfoController {
 
     let result: StopInfoResponse = null;
 
-    const sql = 'SELECT * FROM stops WHERE stop_num=? LIMIT 1;';
+    const sql = 'SELECT *, (stop_id LIKE \'%DB%\') AS is_dublinbus FROM stops WHERE stop_num=? LIMIT 1;';
 
     const query = new Promise((resolve, reject) => {
       con.query(sql, [stopNum], (err, rows) => {
@@ -42,7 +42,8 @@ export class StopInfoController {
             stop_name: rows[0]['stop_name'],
             stop_num: rows[0]['stop_num'],
             stop_lat: rows[0]['stop_lat'],
-            stop_lon: rows[0]['stop_lon']
+            stop_lon: rows[0]['stop_lon'],
+            is_dublinbus: rows[0]['is_dublinbus']
           }
         };
 
