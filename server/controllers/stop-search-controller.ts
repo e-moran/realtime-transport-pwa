@@ -31,7 +31,6 @@ export class StopSearchController {
 
     const query = new Promise((resolve, reject) => {
       con.query(sql, [term, term], (err, rows) => {
-        console.log(err);
         if (err) reject();
 
         if(!rows) {

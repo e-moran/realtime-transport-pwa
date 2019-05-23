@@ -14,7 +14,7 @@ import {
   MatButtonModule,
   MatSidenavModule,
   MatProgressSpinnerModule,
-  MatExpansionModule
+  MatExpansionModule, MatFormFieldModule, MatInputModule
 } from '@angular/material';
 import { NavComponent } from './nav/nav.component';
 import { LayoutModule } from '@angular/cdk/layout';
@@ -22,6 +22,9 @@ import { DueTimePipe } from './due-time.pipe';
 import { DropdownRouteInfoComponent } from './dropdown-route-info/dropdown-route-info.component';
 import { AgmCoreModule } from '@agm/core';
 import { GMAPS_KEY } from './keys';
+import { StopSearchComponent } from './stop-search/stop-search.component';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { StopOperatorPipe } from './stop-operator.pipe';
 
 @NgModule({
   declarations: [
@@ -29,12 +32,15 @@ import { GMAPS_KEY } from './keys';
     StopRtpiComponent,
     NavComponent,
     DueTimePipe,
-    DropdownRouteInfoComponent
+    DropdownRouteInfoComponent,
+    StopSearchComponent,
+    StopOperatorPipe
   ],
   imports: [
     BrowserModule,
     AppRoutingModule,
     HttpClientModule,
+    ReactiveFormsModule,
     BrowserAnimationsModule,
     MatDividerModule,
     MatListModule,
@@ -45,9 +51,12 @@ import { GMAPS_KEY } from './keys';
     MatSidenavModule,
     MatProgressSpinnerModule,
     MatExpansionModule,
+    MatFormFieldModule,
+    MatInputModule,
     AgmCoreModule.forRoot({
       apiKey: GMAPS_KEY
-    })
+    }),
+    FormsModule
   ],
   providers: [],
   bootstrap: [AppComponent]

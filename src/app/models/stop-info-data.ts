@@ -9,4 +9,5 @@ export interface StopInfo {
   stop_num: number;
   stop_lon: number;
   stop_lat: number;
+  is_dublinbus: boolean;
 }

@@ -8,11 +8,11 @@
   </mat-expansion-panel-header>
 
   <div *ngIf="thisStop && routeInfo; else waiting">
-    <agm-map [latitude]="thisStop.stop_lat" [longitude]="thisStop.stop_lon" [zoom]="15">
+    <agm-map [latitude]="thisStop.stop_lat" [longitude]="thisStop.stop_lon" [zoom]="15" [streetViewControl]="false" gestureHandling="greedy">
       <agm-marker *ngFor="let stop of routeInfo.stops" [latitude]="stop.stop_lat" [longitude]="stop.stop_lon">
         <agm-info-window>
           <div class="marker-info">
-            {{ stop.name }}
+            <h4>{{ stop.name }}</h4>
             <br />
             Scheduled Arrival: {{ stop.time }}
           </div>
