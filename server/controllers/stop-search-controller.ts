@@ -18,8 +18,8 @@ export class StopSearchController {
 
     let result: StopSearchResponse = null;
 
-    const sql_name = 'SELECT *, (stop_id LIKE \'%DB%\') AS is_dublinbus FROM stops WHERE MATCH(stop_name) AGAINST(?) AND stop_num != 0 LIMIT 10;';
-    const sql_num = 'SELECT *, (stop_id LIKE \'%DB%\') AS is_dublinbus FROM stops WHERE stop_num=? LIMIT 10 AND stop_num != 0;';
+    const sql_name = 'SELECT *, (stop_id LIKE \'%DB%\') AS is_dublinbus FROM stops WHERE MATCH(stop_name) AGAINST(?) AND NOT stop_num = 0 LIMIT 10;';
+    const sql_num = 'SELECT *, (stop_id LIKE \'%DB%\') AS is_dublinbus FROM stops WHERE stop_num=? AND NOT stop_num = 0 LIMIT 10;';
     let sql = '';
 
     if(isNaN(+term)) {
@@ -31,7 +31,19 @@ export class StopSearchController {
 
     const query = new Promise((resolve, reject) => {
       con.query(sql, [term, term], (err, rows) => {
+        console.log(err);
         if (err) reject();
+
+        if(!rows) {
+          result = {
+            status: 1,
+            timestamp: new Date().toISOString(),
+            stops: null
+          };
+
+          resolve();
+          return;
+        }
 
         if(rows.length == 0) {
           result = {
@@ -52,7 +64,7 @@ export class StopSearchController {
             stop_num: row['stop_num'],
             stop_lat: row['stop_lat'],
             stop_lon: row['stop_lon'],
-            is_dublinbus: row['is_dublinbus']
+            is_dublinbus: row['is_dublinbus'] == 1
           })
         });
 
