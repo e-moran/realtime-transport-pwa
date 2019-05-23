@@ -7,9 +7,9 @@
       <input matInput [formControl]="searchField" />
     </mat-form-field>
   </mat-list-item>
-  <mat-list-item *ngFor="let stop of stops">
+  <mat-list-item *ngFor="let stop of stops" [routerLink]="'/rtpi/' + stop.stop_num">
     <mat-icon mat-list-icon>location</mat-icon>
-    <div mat-line><h4>{{ stop.stop_num }}</h4>&nbsp;-&nbsp;{{ stop.is_dublinbus | stopOperator}}</div>
+    <div mat-line><h4>{{ stop.stop_num }}</h4>&nbsp;-&nbsp;<span class="operator">{{ stop.is_dublinbus | stopOperator}}</span></div>
     <p mat-line>{{ stop.stop_name }}</p>
   </mat-list-item>
 </mat-list>
