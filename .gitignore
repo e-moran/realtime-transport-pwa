@@ -48,3 +48,6 @@ Thumbs.db
 #Sensitive Information
 /server/models/server-settings.json
 /src/app/keys.ts
+
+app.yaml
+.gcloudignore

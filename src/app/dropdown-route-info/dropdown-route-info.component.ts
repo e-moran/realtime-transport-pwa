@@ -11,7 +11,7 @@ import { RouteInfo, RouteStop } from '../models/route-info-model';
 export class DropdownRouteInfoComponent implements OnInit {
 
   @Input()
-  private rtpiData: StopRTPIBusData;
+  public rtpiData: StopRTPIBusData;
   @Input()
   private stopNum: number;
 
