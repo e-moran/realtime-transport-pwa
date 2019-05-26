@@ -4,7 +4,7 @@
   "scripts": {
     "ng": "ng",
     "start": "node dist/api_server/server.js",
-    "build": "ng build --prod & (cd server && tsc)",
+    "build": "ng build --prod & (cd server/src && tsc)",
     "test": "ng test",
     "lint": "ng lint",
     "e2e": "ng e2e",
