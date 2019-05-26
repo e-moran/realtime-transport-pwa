@@ -8,9 +8,9 @@
     "test": "ng test",
     "lint": "ng lint",
     "e2e": "ng e2e",
-    "dev": "ng build --watch & ts-node server/server.ts",
-    "api": "ts-node server/server.ts",
-    "prod": "ng build & ts-node server/server.ts"
+    "dev": "ng build --watch & ts-node server/src/server.ts",
+    "api": "ts-node server/src/server.ts",
+    "prod": "ng build & ts-node server/src/server.ts"
   },
   "private": true,
   "dependencies": {
