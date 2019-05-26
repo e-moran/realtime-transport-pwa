@@ -46,7 +46,7 @@ testem.log
 Thumbs.db
 
 #Sensitive Information
-/server/models/server-settings.json
+/server/src/models/server-settings.json
 /src/app/keys.ts
 
 app.yaml
