@@ -3,8 +3,8 @@
   "version": "0.0.0",
   "scripts": {
     "ng": "ng",
-    "start": "ts-node server/server.ts",
-    "build": "ng build",
+    "start": "node dist/api_server/server.js",
+    "build": "ng build --prod & (cd server && tsc)",
     "test": "ng test",
     "lint": "ng lint",
     "e2e": "ng e2e",
