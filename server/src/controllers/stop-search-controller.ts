@@ -1,86 +1,40 @@
 import { StopSearchResponse } from '../models/stop-search-data';
-import { ServerSettingsController } from './server-settings-controller';
-import * as mysql from 'mysql';
 import { StopInfo } from '../models/stop-info-data';
+import { MySQLService } from '../models/mysql-service';
 
 export class StopSearchController {
   constructor() {}
 
+
   public async searchForStops(term: string): Promise<StopSearchResponse> {
-    const settings = ServerSettingsController.getServerConfig();
-
-    const con = mysql.createConnection({
-      host: 'localhost',
-      user: settings.mysqlUsername,
-      password: settings.mysqlPassword,
-      database: settings.mysqlDatabase,
-    });
-
-    let result: StopSearchResponse = null;
-
-    const sql_name = 'SELECT *, (stop_id LIKE \'%DB%\') AS is_dublinbus FROM stops WHERE MATCH(stop_name) AGAINST(?) AND NOT stop_num = 0 LIMIT 10;';
-    const sql_num = 'SELECT *, (stop_id LIKE \'%DB%\') AS is_dublinbus FROM stops WHERE stop_num=? AND NOT stop_num = 0 LIMIT 10;';
-    let sql = '';
-
-    if(isNaN(+term)) {
-      sql = sql_name;
-    } else {
-      sql = sql_num;
-    }
-
-
-    const query = new Promise((resolve, reject) => {
-      con.query(sql, [term, term], (err, rows) => {
-        if (err) reject();
-
-        if(!rows) {
-          result = {
-            status: 1,
-            timestamp: new Date().toISOString(),
-            stops: null
-          };
-
-          resolve();
-          return;
-        }
-
-        if(rows.length == 0) {
-          result = {
-            status: 1,
-            timestamp: new Date().toISOString(),
-            stops: null
-          };
-
-          resolve();
-          return;
-        }
-
-        let stops: StopInfo[] = [];
-
-        rows.forEach(row => {
-          stops.push({
-            stop_name: row['stop_name'],
-            stop_num: row['stop_num'],
-            stop_lat: row['stop_lat'],
-            stop_lon: row['stop_lon'],
-            is_dublinbus: row['is_dublinbus'] == 1
-          })
-        });
-
-        result = {
-          status: 0,
-          timestamp: new Date().toISOString(),
-          stops: stops
-        };
-
-        resolve();
+    return new MySQLService().searchQuery(term).then(rows => {
+      let stops: StopInfo[] = [];
+      rows.forEach(row => {
+        stops.push({
+          stop_name: row['stop_name'],
+          stop_num: row['stop_num'],
+          stop_lat: row['stop_lat'],
+          stop_lon: row['stop_lon'],
+          is_dublinbus: row['is_dublinbus'] == 1
+        })
       });
+
+      return {
+        status: 0,
+        timestamp: new Date().toISOString(),
+        stops: stops
+      };
+    }).catch(err => {
+      let status = 1;
+
+      if(err != 0)
+        status = 2;
+
+      return {
+        status: status,
+        timestamp: new Date().toISOString(),
+        stops: null
+      }
     });
-
-    await query;
-
-    con.end();
-
-    return result;
   }
 }

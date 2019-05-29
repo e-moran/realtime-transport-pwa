@@ -1,60 +1,34 @@
-import { ServerSettingsController } from './server-settings-controller';
-import * as mysql from 'mysql';
 import { StopInfoResponse } from '../models/stop-info-data';
+import { MySQLService } from '../models/mysql-service';
 
 
 export class StopInfoController {
   constructor() {}
 
-  public async getStopInfo(stopNum: number): Promise<StopInfoResponse> {
-    const settings = ServerSettingsController.getServerConfig();
-
-    const con = mysql.createConnection({
-      host: 'localhost',
-      user: settings.mysqlUsername,
-      password: settings.mysqlPassword,
-      database: settings.mysqlDatabase,
-    });
-
-    let result: StopInfoResponse = null;
-
-    const sql = 'SELECT *, (stop_id LIKE \'%DB%\') AS is_dublinbus FROM stops WHERE stop_num=? LIMIT 1;';
-
-    const query = new Promise((resolve, reject) => {
-      con.query(sql, [stopNum], (err, rows) => {
-        if (err) reject();
-
-        if(rows.length == 0) {
-          result = {
-            status: 1,
-            timestamp: new Date().toISOString(),
-            result: null
-          };
-
-          resolve();
-          return;
+  public async getStopInfo(stopNum: string): Promise<StopInfoResponse> {
+    return new MySQLService().searchQuery(stopNum).then(rows => {
+      return {
+        status: 0,
+        timestamp: new Date().toISOString(),
+        result: {
+          stop_name: rows[0]['stop_name'],
+          stop_num: rows[0]['stop_num'],
+          stop_lat: rows[0]['stop_lat'],
+          stop_lon: rows[0]['stop_lon'],
+          is_dublinbus: rows[0]['is_dublinbus']
         }
+      };
+    }).catch(err => {
+      let status = 1;
 
-        result = {
-          status: 0,
-          timestamp: new Date().toISOString(),
-          result: {
-            stop_name: rows[0]['stop_name'],
-            stop_num: rows[0]['stop_num'],
-            stop_lat: rows[0]['stop_lat'],
-            stop_lon: rows[0]['stop_lon'],
-            is_dublinbus: rows[0]['is_dublinbus']
-          }
-        };
+      if(err != 0)
+        status = 2;
 
-        resolve();
-      });
+      return {
+        status: status,
+        timestamp: new Date().toISOString(),
+        result: null
+      }
     });
-
-    await query;
-
-    con.end();
-
-    return result;
   }
 }

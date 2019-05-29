@@ -1,6 +1,5 @@
 import { RouteStop, RouteTripDataResponse } from '../models/route-trip-data';
-import * as mysql from 'mysql';
-import { ServerSettingsController } from './server-settings-controller';
+import { MySQLService } from '../models/mysql-service';
 
 export class RouteTripController {
   static dateMapping= ['sunday', 'monday', 'tuesday', 'wednesday', 'thursday', 'friday'];
@@ -8,97 +7,40 @@ export class RouteTripController {
   constructor() { }
 
   public async getRouteTripData(routeid: string, direction: string, stopid: string, departuretime: string, agencyName: string): Promise<RouteTripDataResponse> {
-    const settings = ServerSettingsController.getServerConfig();
+    return new MySQLService().routeTripQuery(routeid, direction, stopid, departuretime, RouteTripController.dateMapping[new Date().getDay()], RouteTripController.getAgencyID(agencyName)).then(rows => {
+      let stops: RouteStop[] = [];
 
-    const con = mysql.createConnection({
-      host: 'localhost',
-      user: settings.mysqlUsername,
-      password: settings.mysqlPassword,
-      database: settings.mysqlDatabase,
-      multipleStatements: true
-    });
+      rows.forEach(row => {
+        stops.push({
+          id: row.stop_id,
+          name: row.stop_name,
+          num: row.stop_num,
+          time: row.departure_time,
+          sequence: row.stop_sequence,
+          stop_lat: row.stop_lat,
+          stop_lon: row.stop_lon
+        });
+      });
 
-    con.connect(err => {
-      if(err) {
-        return;
+      return {
+        status: 0,
+        timestamp: new Date().toISOString(),
+        result: {
+          stops: stops
+        }
+      };
+    }).catch(err => {
+      let status = 1;
+
+      if(err != 0)
+        status = 2;
+
+      return {
+        status: status,
+        timestamp: new Date().toISOString(),
+        result: null
       }
     });
-    
-    let result: RouteTripDataResponse = null;
-    const day = RouteTripController.dateMapping[new Date().getDay()];
-    
-    const sql = 'SELECT * FROM stop_times' +
-      '    JOIN stops ON stop_times.stop_id = stops.stop_id' +
-      '    WHERE trip_id = (' +
-      '        SELECT stop_times.trip_id' +
-      '        FROM stop_times' +
-      '                 JOIN trips ON stop_times.trip_id = trips.trip_id' +
-      '                 JOIN calendar ON trips.service_id = calendar.service_id' +
-      '                 JOIN routes ON trips.route_id = routes.route_id' +
-      '                 JOIN stops ON stops.stop_id = stop_times.stop_id' +
-      '        WHERE (route_short_name = ?' +
-      '            OR route_long_name = ?)' +
-      '          AND calendar.' + day + ' = 1' +
-      '          AND trips.direction_id = ?' +
-      '          AND agency_id = ?' +
-      '          AND STR_TO_DATE(calendar.start_date, \'%Y%m%d\') <= NOW()' +
-      '          AND STR_TO_DATE(calendar.end_date, \'%Y%m%d\') >= NOW()' +
-      '          AND stop_num = ?' +
-      '        ORDER BY ABS(TIMEDIFF(STR_TO_DATE(?, \'%H:%i:%s\'), departure_time))' +
-      '        LIMIT 1' +
-      '    );';
-
-    const query = new Promise((resolve, reject) => {
-      con.query(
-        sql,
-        [routeid, routeid, direction == 'O' ? 0 : 1, RouteTripController.getAgencyID(agencyName), stopid, departuretime],
-        (err, rows) => {
-          if (err) reject();
-          let stops: RouteStop[] = [];
-
-          if(rows.length == 0) {
-            result = {
-              status: 1,
-              timestamp: new Date().toISOString(),
-              result: {
-                stops: []
-              }
-            };
-
-            resolve();
-            return;
-          }
-
-          rows.forEach(row => {
-            stops.push({
-              id: row.stop_id,
-              name: row.stop_name,
-              num: row.stop_num,
-              time: row.departure_time,
-              sequence: row.stop_sequence,
-              stop_lat: row.stop_lat,
-              stop_lon: row.stop_lon
-            });
-          });
-
-          result =  {
-            status: 0,
-            timestamp: new Date().toISOString(),
-            result: {
-              stops: stops
-            }
-          } as RouteTripDataResponse;
-
-          resolve();
-        }
-      );
-    });
-
-    await query;
-
-    con.end();
-
-    return result;
   }
 
   private static getAgencyID(agencyName: string) {
