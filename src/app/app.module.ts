@@ -25,6 +25,8 @@ import { GMAPS_KEY } from './keys';
 import { StopSearchComponent } from './stop-search/stop-search.component';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { StopOperatorPipe } from './stop-operator.pipe';
+import { ServiceWorkerModule } from '@angular/service-worker';
+import { environment } from '../environments/environment';
 
 @NgModule({
   declarations: [
@@ -56,7 +58,8 @@ import { StopOperatorPipe } from './stop-operator.pipe';
     AgmCoreModule.forRoot({
       apiKey: GMAPS_KEY
     }),
-    FormsModule
+    FormsModule,
+    ServiceWorkerModule.register('ngsw-worker.js', { enabled: environment.production })
   ],
   providers: [],
   bootstrap: [AppComponent]
