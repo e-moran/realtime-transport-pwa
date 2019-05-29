@@ -9,7 +9,6 @@ export class MySQLService {
     const settings = ServerSettingsController.getServerConfig();
 
     let config: ConnectionConfig = {
-      host: settings.mysqlHost,
       user: settings.mysqlUsername,
       password: settings.mysqlPassword,
       database: settings.mysqlDatabase,
@@ -18,6 +17,8 @@ export class MySQLService {
 
     if(settings.socketPath != "") {
       config.socketPath = settings.socketPath;
+    } else {
+      config.host = settings.mysqlHost;
     }
 
     this.connection = mysql.createConnection(config);
@@ -68,17 +69,23 @@ export class MySQLService {
       this.connection.connect( err => {
         if(err)
           reject(err);
+          return;
         });
 
       this.connection.query(sql, params, (err, rows) => {
-        if (err) reject(err);
+        if (err) {
+          reject(err);
+          return;
+        }
 
         if(!rows) {
           reject(0);
+          return;
         }
 
         if(rows.length == 0) {
           reject(0);
+          return;
         }
 
         this.connection.end();
