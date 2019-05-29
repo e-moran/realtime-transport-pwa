@@ -9,7 +9,7 @@ export class MySQLService {
     const settings = ServerSettingsController.getServerConfig();
 
     let config: ConnectionConfig = {
-      host: 'localhost',
+      host: settings.mysqlHost,
       user: settings.mysqlUsername,
       password: settings.mysqlPassword,
       database: settings.mysqlDatabase,
@@ -17,7 +17,7 @@ export class MySQLService {
     };
 
     if(settings.socketPath != "") {
-      config.socketPath = '/cloudssql/' + settings.socketPath;
+      config.socketPath = settings.socketPath;
     }
 
     this.connection = mysql.createConnection(config);
