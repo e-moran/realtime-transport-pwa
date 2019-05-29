@@ -24,6 +24,7 @@ class App {
     this.app.use(express.static(path.join(__dirname, '../../dist/dublinbus-app')));
     this.app.all('/*', (req, res) => {
       // Just send the index.html for other files to support HTML5Mode
+      console.log(req);
       res.sendFile('index.html', { root: __dirname + '/../../dist/dublinbus-app'});
     });
   }

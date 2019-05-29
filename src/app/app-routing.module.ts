@@ -4,8 +4,9 @@ import { StopRtpiComponent } from './stop-rtpi/stop-rtpi.component';
 import { StopSearchComponent } from './stop-search/stop-search.component';
 
 const routes: Routes = [
-  { 'path': 'rtpi/:stop', 'component': StopRtpiComponent },
-  { 'path': 'stopsearch', 'component': StopSearchComponent }
+  { path: 'rtpi/:stop', component: StopRtpiComponent },
+  { path: 'stopsearch', component: StopSearchComponent },
+  { path: '', component: StopSearchComponent }
 ];
 
 @NgModule({
